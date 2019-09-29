@@ -1,4 +1,12 @@
+/**/.DS_Store
+.classpath
+checkPoint.txt
+.idea
+.project
+.settings
+tokens
 target/
+review/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
