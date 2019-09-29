@@ -1,4 +1,4 @@
-# GooglePaidPhotoFinder
+# Paid Photo Finder
 
 According to https://www.businessinsider.com/how-does-google-photos-work?IR=T
 
