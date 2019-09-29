@@ -8,3 +8,4 @@ This program finds such images and let you decide whether to resize them or dele
 
 ## Other links
  - https://www.quora.com/How-can-I-identify-which-specific-files-in-Google-Photos-are-taking-up-storage-space-so-that-I-can-delete-them
+- https://photos.google.com/settings
