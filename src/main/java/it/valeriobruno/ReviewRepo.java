@@ -9,4 +9,5 @@ public interface ReviewRepo {
 	boolean hasEnoughToReview();
 
 	void download(File fileId) throws IOException;
+	void delete(String fileId) throws Exception;
 }
