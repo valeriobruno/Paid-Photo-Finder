@@ -11,7 +11,7 @@ import com.google.api.services.drive.model.FileList;
 
 public class SearchBigPhotos {
 
-	public static final int PAGE_SIZE = 100;
+	public static final int PAGE_SIZE = 10;
 
 	private final ReviewRepo reviewRepo;
 
@@ -36,7 +36,7 @@ public class SearchBigPhotos {
 				System.out.println("querying Google Drive... ");
 				listQuery = driveService.files().list().setPageSize(PAGE_SIZE)
 						.setFields("nextPageToken, files(id, name, mimeType, imageMediaMetadata)")
-						.setOrderBy("createdTime asc").setQ("mimeType contains 'image'") // image/jpeg image/png etc..
+						.setOrderBy("createdTime desc").setQ("mimeType contains 'image'") // image/jpeg image/png etc..
 						.setPageToken(queryCheckPoint.getStringPointer());
 				Date beforeQuery = new Date();
 				FileList result = listQuery.execute();
@@ -56,7 +56,6 @@ public class SearchBigPhotos {
 						e.printStackTrace();
 					}
 				});
-				;
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -77,7 +76,7 @@ public class SearchBigPhotos {
 	}
 
 	private long getImageResolution(File file) {
-		long res = 0l;
+		long res = 0L;
 		ImageMediaMetadata metadata = file.getImageMediaMetadata();
 		if (metadata != null && metadata.getHeight() != null && metadata.getWidth() != null) {
 			res = ((long) metadata.getHeight()) * ((long) metadata.getWidth());
