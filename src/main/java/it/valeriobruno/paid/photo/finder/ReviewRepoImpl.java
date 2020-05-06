@@ -56,7 +56,7 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 		if (repoDirectory.exists()) {
 			try {
 				long nrPhotos = Files.list(Paths.get(repoDirectory.toURI())).count();
-				result = nrPhotos < ITEMS_TO_REVIEW;
+				result = nrPhotos > ITEMS_TO_REVIEW;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
