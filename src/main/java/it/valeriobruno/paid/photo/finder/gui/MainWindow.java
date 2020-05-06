@@ -8,6 +8,8 @@ import it.valeriobruno.paid.photo.finder.ImageFile;
 import it.valeriobruno.paid.photo.finder.ReviewRepoImpl;
 import it.valeriobruno.SearchBigPhotos;
 
+import java.awt.*;
+
 public class MainWindow {
 	
 	private final SearchBigPhotos search;
@@ -17,6 +19,8 @@ public class MainWindow {
 		
 		
 		JFrame f = new JFrame();
+		f.setSize(400, 400);
+		f.getContentPane().setLayout(new BorderLayout());
 		
 		SelectedImagePanel selectedImagePanel = new SelectedImagePanel(imageRepo);
 		
@@ -24,18 +28,17 @@ public class MainWindow {
 		JList<ImageFile> list = new JList<>(imageRepo);
 		
 		list.addListSelectionListener(selectedImagePanel);
-		f.add(list);
+		f.add(list, BorderLayout.WEST);
 	
 		
 		
-		f.add(selectedImagePanel);
+		f.add(selectedImagePanel,BorderLayout.CENTER);
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
 		
-		f.setSize(400, 400);
-		f.getContentPane().setLayout(new BoxLayout(f.getContentPane(), BoxLayout.X_AXIS));
+
 		f.setVisible(true);
 	}
 }

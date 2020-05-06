@@ -40,10 +40,10 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 
 		this.imageRepo = imageRepo;
 
-		this.setLayout(new BorderLayout(0, 50));
+		this.setLayout(new BorderLayout(0, 5));
 
 		imagePanel = new JPanel();
-		this.add(imagePanel, BorderLayout.NORTH);
+		this.add(imagePanel, BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel();
 		this.add(buttonPanel, BorderLayout.SOUTH);
 
