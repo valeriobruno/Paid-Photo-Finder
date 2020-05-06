@@ -1,4 +1,4 @@
-package it.valeriobruno;
+package it.valeriobruno.paid.photo.finder.search;
 
 import java.io.File;
 import java.io.IOException;

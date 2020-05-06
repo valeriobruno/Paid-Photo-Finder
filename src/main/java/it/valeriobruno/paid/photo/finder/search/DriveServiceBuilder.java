@@ -1,4 +1,4 @@
-package it.valeriobruno.paid.photo.finder;
+package it.valeriobruno.paid.photo.finder.search;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +20,6 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-
-import it.valeriobruno.SearchBigPhotos;
 
 public class DriveServiceBuilder {
 	private static final String APPLICATION_NAME = SearchBigPhotos.class.getSimpleName();

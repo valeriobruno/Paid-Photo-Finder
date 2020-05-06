@@ -1,4 +1,4 @@
-package it.valeriobruno;
+package it.valeriobruno.paid.photo.finder.search;
 
 import java.io.IOException;
 import java.util.Date;
@@ -9,6 +9,7 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.File.ImageMediaMetadata;
 import com.google.api.services.drive.model.FileList;
 import it.valeriobruno.paid.photo.finder.ReviewRepo;
+import it.valeriobruno.paid.photo.finder.search.QueryCheckPointImpl;
 
 public class SearchBigPhotos {
 
