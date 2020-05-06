@@ -3,10 +3,9 @@ package it.valeriobruno.paid.photo.finder.gui;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import it.valeriobruno.ReviewRepoImpl;
+import it.valeriobruno.paid.photo.finder.ImageFile;
+import it.valeriobruno.paid.photo.finder.ReviewRepoImpl;
 import it.valeriobruno.SearchBigPhotos;
 
 public class MainWindow {
@@ -22,7 +21,7 @@ public class MainWindow {
 		SelectedImagePanel selectedImagePanel = new SelectedImagePanel(imageRepo);
 		
 		
-		JList<String> list = new JList<>(imageRepo);
+		JList<ImageFile> list = new JList<>(imageRepo);
 		
 		list.addListSelectionListener(selectedImagePanel);
 		f.add(list);

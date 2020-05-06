@@ -3,7 +3,6 @@ package it.valeriobruno.paid.photo.finder;
 import com.google.api.services.drive.Drive;
 
 import it.valeriobruno.QueryCheckPointImpl;
-import it.valeriobruno.ReviewRepoImpl;
 import it.valeriobruno.SearchBigPhotos;
 import it.valeriobruno.paid.photo.finder.gui.MainWindow;
 

@@ -18,7 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import it.valeriobruno.ReviewRepoImpl;
+import it.valeriobruno.paid.photo.finder.ImageFile;
+import it.valeriobruno.paid.photo.finder.ReviewRepoImpl;
 
 public class SelectedImagePanel extends JPanel implements ListSelectionListener {
 
@@ -33,7 +34,7 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 
 	//model
 	private BufferedImage selectedImage;
-	private String imageId;
+	private ImageFile imageFile;
 	
 	public SelectedImagePanel(ReviewRepoImpl imageRepo) {
 
@@ -72,24 +73,24 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 		if (!event.getValueIsAdjusting()) {
 			
 			@SuppressWarnings("unchecked")
-			JList<String> source = (JList<String>) event.getSource();
+			JList<ImageFile> source = (JList<ImageFile>) event.getSource();
 
-			String id = source.getSelectedValue();
-			if (id != null) {
+			ImageFile imageFile = source.getSelectedValue();
+			if (imageFile != null) {
 				try {
-					selectedImage = imageRepo.loadImage(id);
+					selectedImage = imageFile.load();
 
 					showImage();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				this.imageId = id;
+				this.imageFile = imageFile;
 				
 			} else {
 				this.imageLabel.setIcon(null);
 				this.selectedImage = null;
-				this.imageId = null;
+				this.imageFile = null;
 			}
 		}
 
@@ -103,14 +104,18 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 	}
 
 	private Point calculateImgResize() {
-		Dimension panelSize = this.getSize(); //note: the full panel, wiht the buttons
+		Dimension panelSize = this.getSize(); //note: the full panel, with the buttons
 
-		int width = (int) panelSize.getWidth();
+
 		int spaceForButtons = 40;
-		int height = (int) (width * (panelSize.getHeight() - spaceForButtons) / panelSize.getWidth());
-		if (height > panelSize.getHeight() - spaceForButtons) {
+		int width;
+		int height;
+		if (panelSize.getHeight() - spaceForButtons < panelSize.getWidth()) {
+			width = (int) panelSize.getWidth();
+			height = (width * selectedImage.getHeight() / selectedImage.getWidth());
+		} else {
 			height = (int) panelSize.getHeight() - spaceForButtons;
-			width = (int) (height * panelSize.getWidth() / (panelSize.getHeight() - spaceForButtons));
+			width = height * selectedImage.getWidth() /selectedImage.getHeight();
 		}
 
 		return new Point(width, height);
@@ -155,7 +160,7 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 			if (e.getSource() == deleteButton)
 			{
 				try {
-					SelectedImagePanel.this.imageRepo.delete(imageId);
+					SelectedImagePanel.this.imageRepo.delete(imageFile);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
