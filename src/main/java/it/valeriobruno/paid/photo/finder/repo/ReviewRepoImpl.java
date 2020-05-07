@@ -1,6 +1,5 @@
-package it.valeriobruno.paid.photo.finder;
+package it.valeriobruno.paid.photo.finder.repo;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -12,10 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractListModel;
 
 import com.google.api.services.drive.Drive;
+import it.valeriobruno.paid.photo.finder.ImageFile;
 
 public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements ReviewRepo {
 
@@ -48,7 +47,7 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see it.valeriobruno.paid.photo.finder.ReviewRepo#hasEnoughToReview()
+	 * @see it.valeriobruno.paid.photo.finder.repo.ReviewRepo#hasEnoughToReview()
 	 */
 	public boolean hasEnoughToReview() {
 		boolean result = false;

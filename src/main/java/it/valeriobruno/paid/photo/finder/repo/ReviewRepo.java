@@ -1,4 +1,6 @@
-package it.valeriobruno.paid.photo.finder;
+package it.valeriobruno.paid.photo.finder.repo;
+
+import it.valeriobruno.paid.photo.finder.ImageFile;
 
 import java.io.IOException;
 

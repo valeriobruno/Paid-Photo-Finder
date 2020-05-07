@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import it.valeriobruno.paid.photo.finder.ImageFile;
-import it.valeriobruno.paid.photo.finder.ReviewRepoImpl;
+import it.valeriobruno.paid.photo.finder.repo.ReviewRepoImpl;
 
 public class SelectedImagePanel extends JPanel implements ListSelectionListener {
 

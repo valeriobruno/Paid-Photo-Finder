@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 
 import it.valeriobruno.paid.photo.finder.ImageFile;
-import it.valeriobruno.paid.photo.finder.ReviewRepoImpl;
+import it.valeriobruno.paid.photo.finder.repo.ReviewRepoImpl;
 import it.valeriobruno.paid.photo.finder.search.SearchBigPhotos;
 
 import java.awt.*;

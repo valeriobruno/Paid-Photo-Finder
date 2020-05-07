@@ -8,8 +8,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.File.ImageMediaMetadata;
 import com.google.api.services.drive.model.FileList;
-import it.valeriobruno.paid.photo.finder.ReviewRepo;
-import it.valeriobruno.paid.photo.finder.search.QueryCheckPointImpl;
+import it.valeriobruno.paid.photo.finder.repo.ReviewRepo;
 
 public class SearchBigPhotos {
 
