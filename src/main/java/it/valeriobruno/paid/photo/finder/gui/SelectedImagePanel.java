@@ -66,8 +66,8 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 			
 			@SuppressWarnings("unchecked")
 			JList<ImageFile> source = (JList<ImageFile>) event.getSource();
-
 			ImageFile imageFile = source.getSelectedValue();
+
 			if (imageFile != null) {
 				try {
 					selectedImage = imageFile.load();
@@ -102,7 +102,7 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 		int spaceForButtons = 40;
 		int width;
 		int height;
-		if (panelSize.getHeight() - spaceForButtons < panelSize.getWidth()) {
+		if (panelSize.getHeight() - spaceForButtons >= panelSize.getWidth()) {
 			width = (int) panelSize.getWidth();
 			height = (width * selectedImage.getHeight() / selectedImage.getWidth());
 		} else {
