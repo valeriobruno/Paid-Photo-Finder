@@ -5,7 +5,10 @@ import it.valeriobruno.paid.photo.finder.ImageFile;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,13 +24,11 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 	private final Drive driveService;
 	private final List<ImageFile> images;
 
-	private final DownloadedFileFilter fileFilter;
 	private IgnoredImagesRegistry ignoredImages;
 
 	public ReviewRepoImpl(File repoDirectory, Drive driveService) {
 		this.repoDirectory = repoDirectory;
 		this.driveService = driveService;
-		this.fileFilter = new DownloadedFileFilter();
 		this.images = new ArrayList<>(20); // 2 * PAGE_SIZE
 
 	}
@@ -45,8 +46,12 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 	}
 
 	private void loadImages() {
-		File[] imageFiles = this.repoDirectory.listFiles(new DownloadedFileFilter());
-		Arrays.stream(imageFiles).map(ImageFile::fromFile).filter( img -> !ignoredImages.isIgnored(img)).forEach(images::add);
+		File[] imageFiles = repoDirectory.listFiles();
+		Arrays.stream(imageFiles)
+				.filter(file -> !file.getName().startsWith(".") && file.isFile())
+				.map(ImageFile::fromFile)
+				.filter( img -> !ignoredImages.isIgnored(img))
+				.forEach(images::add);
 	}
 
 	/*
@@ -132,16 +137,4 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
     public ImageFile getElementAt(int index) {
         return images.get(index);
     }
-
-    static class DownloadedFileFilter implements FileFilter {
-
-		@Override
-		public boolean accept(File pathname) {
-			String name = pathname.getName();
-			return !name.startsWith(".") && pathname.isFile();
-		}
-
-	}
-
-
 }
