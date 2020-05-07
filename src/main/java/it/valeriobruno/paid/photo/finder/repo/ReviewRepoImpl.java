@@ -1,20 +1,15 @@
 package it.valeriobruno.paid.photo.finder.repo;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.google.api.services.drive.Drive;
+import it.valeriobruno.paid.photo.finder.ImageFile;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import javax.swing.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.AbstractListModel;
-
-import com.google.api.services.drive.Drive;
-import it.valeriobruno.paid.photo.finder.ImageFile;
+import java.util.concurrent.CompletableFuture;
 
 public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements ReviewRepo {
 
@@ -27,21 +22,31 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 	private final List<ImageFile> images;
 
 	private final DownloadedFileFilter fileFilter;
+	private IgnoredImagesRegistry ignoredImages;
 
 	public ReviewRepoImpl(File repoDirectory, Drive driveService) {
 		this.repoDirectory = repoDirectory;
 		this.driveService = driveService;
 		this.fileFilter = new DownloadedFileFilter();
-
-
-		if (!repoDirectory.exists())
-			repoDirectory.mkdirs();
-		else if (!repoDirectory.isDirectory())
-			throw new RuntimeException("Not a directory");
-
 		this.images = new ArrayList<>(20); // 2 * PAGE_SIZE
+
+	}
+
+	public void init() throws Exception{
+		if (!repoDirectory.exists()) {
+			repoDirectory.mkdirs();
+		} else if (!repoDirectory.isDirectory()) {
+			throw new RuntimeException("Not a directory");
+		}
+
+		this.ignoredImages =  IgnoredImagesRegistry.loadIfExists(new File(this.repoDirectory,".ignored"));
+		loadImages();
+
+	}
+
+	private void loadImages() {
 		File[] imageFiles = this.repoDirectory.listFiles(new DownloadedFileFilter());
-		Arrays.stream(imageFiles).map(ImageFile::fromFile).forEach(images::add);
+		Arrays.stream(imageFiles).map(ImageFile::fromFile).filter( img -> !ignoredImages.isIgnored(img)).forEach(images::add);
 	}
 
 	/*
@@ -50,17 +55,7 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 	 * @see it.valeriobruno.paid.photo.finder.repo.ReviewRepo#hasEnoughToReview()
 	 */
 	public boolean hasEnoughToReview() {
-		boolean result = false;
-
-		if (repoDirectory.exists()) {
-			try {
-				long nrPhotos = Files.list(Paths.get(repoDirectory.toURI())).count();
-				result = nrPhotos > ITEMS_TO_REVIEW;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
+		return images.size() >= ITEMS_TO_REVIEW;
 	}
 
 	@Override
@@ -86,25 +81,42 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 		}
 
 		images.add(ImageFile.fromFile(downloadedFile));
-		fireIntervalAdded(this,images.size()-1,images.size()-1);
+		CompletableFuture.runAsync(() -> fireIntervalAdded(this,images.size()-1,images.size()-1));
+	}
+
+	@Override
+	public void ignore(ImageFile file) throws Exception {
+		ignoredImages.add(file);
+		removeFromCache(file);
+	}
+
+
+
+	@Override
+	public void resize(ImageFile file) throws Exception {
+		throw new NotImplementedException();
 	}
 
 	@Override
 	public void delete(ImageFile file) throws Exception {
 		String fileId = file.getId();
+
+		//delete from Google Drive
 		driveService.files().delete(fileId).execute();
+
+		//delete local copy
 		File localFile = fileFromId(fileId);
-		File[] files = repoDirectory.listFiles(fileFilter);
-		for (int x = 0; x < files.length; x++) {
-			if (files[x].equals(localFile)) {
-				fireIntervalRemoved(this, x, x);
-				break;
-			}
-		}
 		localFile.delete();
 
+		removeFromCache(file);
 	}
 
+	private void removeFromCache(ImageFile file) {
+		int index = images.indexOf(file);
+		images.remove(file);
+		//notify the UI
+		CompletableFuture.runAsync(() -> fireIntervalRemoved(this, index, index) );
+	}
 
 	private File fileFromId(String id) {
 		return new File(this.repoDirectory, id);
@@ -121,7 +133,7 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
         return images.get(index);
     }
 
-	static class DownloadedFileFilter implements FileFilter {
+    static class DownloadedFileFilter implements FileFilter {
 
 		@Override
 		public boolean accept(File pathname) {

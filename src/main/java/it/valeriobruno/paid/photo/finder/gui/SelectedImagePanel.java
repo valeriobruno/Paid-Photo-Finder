@@ -1,25 +1,17 @@
 package it.valeriobruno.paid.photo.finder.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Point;
+import it.valeriobruno.paid.photo.finder.ImageFile;
+import it.valeriobruno.paid.photo.finder.repo.ReviewRepoImpl;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import it.valeriobruno.paid.photo.finder.ImageFile;
-import it.valeriobruno.paid.photo.finder.repo.ReviewRepoImpl;
 
 public class SelectedImagePanel extends JPanel implements ListSelectionListener {
 
@@ -157,15 +149,26 @@ public class SelectedImagePanel extends JPanel implements ListSelectionListener 
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == deleteButton)
-			{
-				try {
-					SelectedImagePanel.this.imageRepo.delete(imageFile);
-				} catch (Exception e1) {
-					e1.printStackTrace();
+			try{
+				if(imageFile != null) {
+					if (e.getSource() == deleteButton) {
+						imageRepo.delete(imageFile);
+
+					} else if (e.getSource() == keepButton) {
+						imageRepo.ignore(imageFile);
+					}
+					else if (e.getSource() == reduceButton)
+					{
+						imageRepo.resize(imageFile);
+					}
+
+					SelectedImagePanel.this.imageFile = null;
+					SelectedImagePanel.this.selectedImage = null;
+					SelectedImagePanel.this.imageLabel.setIcon(null);
 				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-			
 		}
 		
 	}
