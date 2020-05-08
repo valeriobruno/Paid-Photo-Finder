@@ -2,9 +2,10 @@ package it.valeriobruno.paid.photo.finder.repo;
 
 import com.google.api.services.drive.Drive;
 import it.valeriobruno.paid.photo.finder.ImageFile;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -99,7 +100,13 @@ public class ReviewRepoImpl extends AbstractListModel<ImageFile> implements Revi
 
 	@Override
 	public void resize(ImageFile file) throws Exception {
-		throw new NotImplementedException();
+		BufferedImage smallImage = file.shrink();
+		File smallFile = File.createTempFile(file.getPath().getName(), "_small", this.repoDirectory);
+		ImageIO.write(smallImage,"jpg", smallFile);
+
+		//Upload
+		//removeFromCache(file);
+		smallFile.delete();
 	}
 
 	@Override

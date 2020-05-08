@@ -1,19 +1,16 @@
 package it.valeriobruno;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.Image;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 public class ResizeImage {
 
 	public static final long MAX_RES = 16000000L;
-	
-	BufferedImage createResizedCopy(Image originalImage, int scaledWidth, int scaledHeight, boolean preserveAlpha) {
+
+	public BufferedImage createResizedCopy(Image originalImage, int scaledWidth, int scaledHeight, boolean preserveAlpha) {
 		int imageType = preserveAlpha ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
 		BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, imageType);
 		Graphics2D g = scaledBI.createGraphics();
@@ -32,13 +29,13 @@ public class ResizeImage {
 		{
 			int newWidth = Math.floorDiv(width*pct,100);
 			int newHeight = Math.floorDiv(height*pct,100);
-			
+
 			long resolution = ((long)newHeight) * ((long) newWidth);
-			
+
 			if(resolution < MAX_RES)
 				return pct;
 		}
-		
+
 		throw new RuntimeException("Can't calculate resize ratio");
 	}
 	
